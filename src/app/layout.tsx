@@ -3,7 +3,6 @@ import type { ReactNode } from "react"
 
 import Providers from "@/layouts/providers/providers-layout"
 
-import NProgress from "@/components/base/nprogress"
 import Header from "@/components/header"
 
 export const dynamic = "force-dynamic"
@@ -25,7 +24,6 @@ export default async function Layout({ children }: LayoutProps) {
                 <Providers>
                     <Header />
                     {children}
-                    <NProgress />
                 </Providers>
             </body>
         </html>
