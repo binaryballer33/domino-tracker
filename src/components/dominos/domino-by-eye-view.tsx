@@ -1,15 +1,11 @@
 "use client"
 
+import type { DominoWithIndex } from "@/types/domino"
+
 import Domino from "./domino"
 
 type DominoByEyeProps = {
-    dominoes: {
-        first: number
-        id: string
-        index: number
-        played: boolean
-        second: number
-    }[]
+    dominoes: DominoWithIndex[]
     highlightedValue: null | number
     onToggle: (index: number) => void
 }
@@ -23,20 +19,20 @@ export default function DominoByEye(props: DominoByEyeProps) {
         .map((_, eyeValue) => {
             // Find all dominoes that contain this eye value
             const matchingDominoes = dominoes.filter(
-                (domino) => domino.first === eyeValue || domino.second === eyeValue,
+                (domino) => domino.firstEye === eyeValue || domino.secondEye === eyeValue,
             )
 
             // Sort them by the other value (or by the same value for doubles)
             return matchingDominoes.sort((a, b) => {
-                const aOtherValue = a.first === eyeValue ? a.second : a.first
-                const bOtherValue = b.first === eyeValue ? b.second : b.first
+                const aOtherValue = a.firstEye === eyeValue ? a.secondEye : a.firstEye
+                const bOtherValue = b.firstEye === eyeValue ? b.secondEye : b.firstEye
                 return aOtherValue - bOtherValue
             })
         })
 
-    const isDominoHighlighted = (domino: { first: number; second: number }) => {
+    const isDominoHighlighted = (domino: DominoWithIndex) => {
         if (highlightedValue === null) return false
-        return domino.first === highlightedValue || domino.second === highlightedValue
+        return domino.firstEye === highlightedValue || domino.secondEye === highlightedValue
     }
 
     return (
@@ -46,17 +42,17 @@ export default function DominoByEye(props: DominoByEyeProps) {
                     <div className="flex flex-wrap gap-2">
                         {eyeDominoes.map((domino) => {
                             // Ensure the eye value is shown first
-                            const first = domino.first === eyeValue ? domino.first : domino.second
-                            const second = domino.first === eyeValue ? domino.second : domino.first
+                            const first = domino.firstEye === eyeValue ? domino.firstEye : domino.secondEye
+                            const second = domino.firstEye === eyeValue ? domino.secondEye : domino.firstEye
 
                             return (
                                 <div className="w-16" key={domino.id}>
                                     <Domino
-                                        first={first}
+                                        firstEye={first}
                                         highlighted={isDominoHighlighted(domino)}
                                         onClick={() => onToggle(domino.index)}
                                         played={domino.played}
-                                        second={second}
+                                        secondEye={second}
                                     />
                                     <div className="mt-1 text-center text-xs">
                                         {first}-{second}

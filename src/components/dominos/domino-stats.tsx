@@ -1,19 +1,19 @@
 "use client"
 
+import type EyeStat from "@/types/eye-stats"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-import DominoDots from "./domino-dots"
-
-type EyeStat = {
-    dominoes: string[]
-    played: number
-    remaining: number
-    total: number
-    value: number
-}
+import DominoDots from "./domino-dot"
+import getDoublesRemaining from "./helper-functions/get-doubles-remaining"
+import getHeavyDominoesRemaining from "./helper-functions/get-heavy-domino-remaining"
+import getLeastCommonValues from "./helper-functions/get-least-common-values"
+import getMaxCommonValues from "./helper-functions/get-max-common-values"
+import getMaxRemainingCount from "./helper-functions/get-max-remaining-domino-count"
+import getMinRemainingCount from "./helper-functions/get-min-remaining-domino-count"
 
 type StatsPanelProps = {
     activeValue: null | number
@@ -24,8 +24,8 @@ type StatsPanelProps = {
 export default function StatsPanel(props: StatsPanelProps) {
     const { activeValue, onHover, stats } = props
 
-    const mostCommonValue = getMostCommonValue(stats)
-    const leastCommonValue = getLeastCommonValue(stats)
+    const mostCommonValues = getMaxCommonValues(stats)
+    const leastCommonValues = getLeastCommonValues(stats)
 
     return (
         <div className="space-y-4">
@@ -51,7 +51,7 @@ export default function StatsPanel(props: StatsPanelProps) {
                                         >
                                             <div className="mb-1 flex items-center gap-3">
                                                 <div className="flex h-6 w-6 items-center justify-center rounded-md bg-muted">
-                                                    <DominoDots value={stat.value} />
+                                                    <DominoDots dominoEye={stat.value} />
                                                 </div>
                                                 <div className="flex-1 font-medium">
                                                     {stat.remaining} / {stat.total} Remaining
@@ -86,18 +86,32 @@ export default function StatsPanel(props: StatsPanelProps) {
                     <div className="space-y-2 text-sm">
                         <div className="flex items-center justify-between">
                             <span>Most Common Remaining:</span>
-                            <div className="flex items-center gap-2">
-                                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-muted">
-                                    <DominoDots value={mostCommonValue} />
+                            <div className="flex items-center">
+                                <div className="mr-2 flex items-center gap-2">
+                                    {mostCommonValues.map((value) => (
+                                        <div
+                                            className="flex h-6 w-6 items-center justify-center rounded-md bg-muted"
+                                            key={value}
+                                        >
+                                            <DominoDots dominoEye={value} />
+                                        </div>
+                                    ))}
                                 </div>
                                 <span className="font-medium">{getMaxRemainingCount(stats)}</span>
                             </div>
                         </div>
                         <div className="flex items-center justify-between">
                             <span>Least Common Remaining:</span>
-                            <div className="flex items-center gap-2">
-                                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-muted">
-                                    <DominoDots value={leastCommonValue} />
+                            <div className="flex items-center">
+                                <div className="mr-2 flex items-center gap-2">
+                                    {leastCommonValues.map((value) => (
+                                        <div
+                                            className="flex h-6 w-6 items-center justify-center rounded-md bg-muted"
+                                            key={value}
+                                        >
+                                            <DominoDots dominoEye={value} />
+                                        </div>
+                                    ))}
                                 </div>
                                 <span className="font-medium">{getMinRemainingCount(stats)}</span>
                             </div>
@@ -115,45 +129,4 @@ export default function StatsPanel(props: StatsPanelProps) {
             </Card>
         </div>
     )
-}
-
-// Helper functions for statistics
-function getMostCommonValue(stats: EyeStat[]): number {
-    return stats.reduce((max, stat) => (stat.remaining > stats[max].remaining ? stat.value : max), 0)
-}
-
-function getLeastCommonValue(stats: EyeStat[]): number {
-    return stats.reduce(
-        (min, stat) => (stat.remaining < stats[min].remaining && stat.remaining > 0 ? stat.value : min),
-        0,
-    )
-}
-
-function getMaxRemainingCount(stats: EyeStat[]): number {
-    return Math.max(...stats.map((s) => s.remaining))
-}
-
-function getMinRemainingCount(stats: EyeStat[]): number {
-    const nonZeroRemaining = stats.filter((s) => s.remaining > 0)
-    return nonZeroRemaining.length ? Math.min(...nonZeroRemaining.map((s) => s.remaining)) : 0
-}
-
-function getDoublesRemaining(stats: EyeStat[]): number {
-    // Count actual doubles remaining by checking their IDs
-    const doubleIds = ["0-0", "1-1", "2-2", "3-3", "4-4", "5-5", "6-6"]
-    let count = 0
-
-    stats.forEach((stat) => {
-        const doubleId = `${stat.value}-${stat.value}`
-        if (doubleIds.includes(doubleId) && stat.dominoes.includes(doubleId)) {
-            count += 1
-        }
-    })
-
-    return count
-}
-
-function getHeavyDominoesRemaining(stats: EyeStat[]): number {
-    // Approximation - higher values are more likely to be in heavy dominoes
-    return Math.floor((stats[4].remaining + stats[5].remaining + stats[6].remaining) / 2)
 }
