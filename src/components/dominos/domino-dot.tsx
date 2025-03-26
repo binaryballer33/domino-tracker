@@ -1,6 +1,8 @@
+import type { DominoDotSize, DominoEye } from "@/types/domino"
+
 type DominoDotsProps = {
-    dominoEye: 0 | 1 | 2 | 3 | 4 | 5 | 6
-    size?: "lg" | "md" | "sm"
+    dominoEye: DominoEye
+    size?: DominoDotSize
 }
 
 export default function DominoDots(props: DominoDotsProps) {
@@ -104,15 +106,19 @@ function renderDots(dominoEye: number, dotSize: string) {
     }
 }
 
-function getDotSize(size: "lg" | "md" | "sm") {
+function getDotSize(size: DominoDotSize) {
     switch (size) {
-        case "lg":
+        case "xl":
             return "h-2.5 w-2.5"
-        case "md":
+        case "lg":
             return "h-2 w-2"
+        case "md":
+            return "h-[6px] w-[6px]"
         case "sm":
+            return "h-1.5 w-1.5"
+        case "xs":
             return "h-1 w-1"
         default:
-            return "h-2.5 w-2.5"
+            return "h-1.5 w-1.5"
     }
 }

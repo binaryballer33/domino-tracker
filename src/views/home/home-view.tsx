@@ -27,7 +27,7 @@ export default function HomeView() {
                 <CardHeader>
                     <CardTitle className="text-center text-2xl md:text-3xl">Domino Tracker</CardTitle>
                     <CardDescription className="text-center">
-                        Click On Dominoes To Mark/Unmark Them As Played
+                        Click On Dominoes To Mark / Unmark Them As Played
                     </CardDescription>
 
                     <GameInforAndControls
@@ -40,7 +40,7 @@ export default function HomeView() {
                     <div className="grid gap-6 md:grid-cols-2">
                         {/* Dominoes section */}
                         <DominoViewTabs
-                            dominoes={dominoes}
+                            dominos={dominoes}
                             highlightedValue={highlightedValue}
                             setDominoes={setDominoes}
                         />

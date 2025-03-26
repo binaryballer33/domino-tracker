@@ -6,21 +6,16 @@ import Domino from "./domino"
 import getSevenRowsOfSortedDominos from "./helper-functions/get-seven-rows-sorted-dominos"
 
 type DominoByEyeViewProps = {
-    dominoes: DominoWithIndex[]
-    highlightedValue: null | number
+    dominos: DominoWithIndex[]
+    isDominoHighlighted: (domino: DominoWithIndex) => boolean
+    isDominoPlayed: (domino: DominoWithIndex) => boolean
     onToggle: (index: number) => void
 }
 
 export default function DominoByEyeView(props: DominoByEyeViewProps) {
-    const { dominoes, highlightedValue, onToggle } = props
+    const { dominos, isDominoHighlighted, isDominoPlayed, onToggle } = props
 
-    // Create array of array of domino objects [ [ {domino}, {domino}, {domino} ], [ {domino}, {domino}, {domino}, ... ] ]
-    const sortedRowsOfDominos: DominoWithIndex[][] = getSevenRowsOfSortedDominos(dominoes)
-
-    const isDominoHighlighted = (domino: DominoWithIndex) => {
-        if (highlightedValue === null) return false
-        return domino.firstEye === highlightedValue || domino.secondEye === highlightedValue
-    }
+    const sortedRowsOfDominos: DominoWithIndex[][] = getSevenRowsOfSortedDominos(dominos)
 
     return (
         <div className="space-y-6">
@@ -38,8 +33,9 @@ export default function DominoByEyeView(props: DominoByEyeViewProps) {
                                         firstEye={first}
                                         highlighted={isDominoHighlighted(domino)}
                                         onClick={() => onToggle(domino.index)}
-                                        played={domino.played}
+                                        played={isDominoPlayed(domino)}
                                         secondEye={second}
+                                        size="md"
                                     />
                                     <div className="mt-1 text-center text-xs">
                                         {first}-{second}

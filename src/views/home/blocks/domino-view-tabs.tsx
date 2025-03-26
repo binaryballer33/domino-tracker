@@ -3,20 +3,20 @@ import type { Dispatch, SetStateAction } from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import Domino from "@/components/dominos/domino"
-import DominoByEyeView from "@/components/dominos/domino-by-eye-view"
+import DominoRowsSortedByEyeView from "@/components/dominos/domino-rows-sorted-by-eye-view"
+import DominoSortedView from "@/components/dominos/domino-sorted-view"
 
 type DominoViewTabsProps = {
-    dominoes: TDomino[]
+    dominos: TDomino[]
     highlightedValue: null | number
     setDominoes: Dispatch<SetStateAction<TDomino[]>>
 }
 
 export default function DominoViewTabs(props: DominoViewTabsProps) {
-    const { dominoes, highlightedValue, setDominoes } = props
+    const { dominos, highlightedValue, setDominoes } = props
 
     const toggleDomino = (index: number) => {
-        const newDominoes = [...dominoes]
+        const newDominoes = [...dominos]
         newDominoes[index].played = !newDominoes[index].played
         setDominoes(newDominoes)
     }
@@ -28,7 +28,7 @@ export default function DominoViewTabs(props: DominoViewTabsProps) {
 
     const isDominoPlayed = (domino: TDomino) => domino.played
 
-    const dominoesWithIndex = dominoes.map((domino, index) => ({
+    const dominoesWithIndex = dominos.map((domino, index) => ({
         ...domino,
         index,
     }))
@@ -42,26 +42,21 @@ export default function DominoViewTabs(props: DominoViewTabsProps) {
                 </TabsList>
 
                 <TabsContent className="mt-4" value="by-eye">
-                    <DominoByEyeView
-                        dominoes={dominoesWithIndex}
-                        highlightedValue={highlightedValue}
+                    <DominoRowsSortedByEyeView
+                        dominos={dominoesWithIndex}
+                        isDominoHighlighted={isDominoHighlighted}
+                        isDominoPlayed={isDominoPlayed}
                         onToggle={toggleDomino}
                     />
                 </TabsContent>
 
                 <TabsContent className="mt-4" value="all">
-                    <div className="mb-6 grid grid-cols-4 gap-2 sm:grid-cols-5">
-                        {dominoes.map((domino, index) => (
-                            <Domino
-                                firstEye={domino.firstEye}
-                                highlighted={isDominoHighlighted(domino)}
-                                key={domino.id}
-                                onClick={() => toggleDomino(index)}
-                                played={isDominoPlayed(domino)}
-                                secondEye={domino.secondEye}
-                            />
-                        ))}
-                    </div>
+                    <DominoSortedView
+                        dominos={dominoesWithIndex}
+                        isDominoHighlighted={isDominoHighlighted}
+                        isDominoPlayed={isDominoPlayed}
+                        toggleDomino={toggleDomino}
+                    />
                 </TabsContent>
             </Tabs>
         </div>

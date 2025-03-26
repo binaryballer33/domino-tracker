@@ -51,7 +51,7 @@ export default function StatsPanel(props: StatsPanelProps) {
                                         >
                                             <div className="mb-1 flex items-center gap-3">
                                                 <div className="flex h-6 w-6 items-center justify-center rounded-md bg-muted">
-                                                    <DominoDots dominoEye={stat.value} />
+                                                    <DominoDots dominoEye={stat.value} size="xs" />
                                                 </div>
                                                 <div className="flex-1 font-medium">
                                                     {stat.remaining} / {stat.total} Remaining
@@ -93,7 +93,7 @@ export default function StatsPanel(props: StatsPanelProps) {
                                             className="flex h-6 w-6 items-center justify-center rounded-md bg-muted"
                                             key={value}
                                         >
-                                            <DominoDots dominoEye={value} />
+                                            <DominoDots dominoEye={value} size="xs" />
                                         </div>
                                     ))}
                                 </div>
@@ -109,7 +109,7 @@ export default function StatsPanel(props: StatsPanelProps) {
                                             className="flex h-6 w-6 items-center justify-center rounded-md bg-muted"
                                             key={value}
                                         >
-                                            <DominoDots dominoEye={value} />
+                                            <DominoDots dominoEye={value} size="xs" />
                                         </div>
                                     ))}
                                 </div>
