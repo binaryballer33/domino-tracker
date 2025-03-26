@@ -18,7 +18,7 @@ export default function DominoByEyeView(props: DominoByEyeViewProps) {
     const sortedRowsOfDominos: DominoWithIndex[][] = getSevenRowsOfSortedDominos(dominos)
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             {sortedRowsOfDominos.map((sortedRow, eyeValue) => (
                 <div className="space-y-2" key={eyeValue}>
                     <div className="flex flex-wrap gap-2">
@@ -30,12 +30,12 @@ export default function DominoByEyeView(props: DominoByEyeViewProps) {
                             return (
                                 <div className="w-16" key={domino.id}>
                                     <Domino
+                                        dominoDotSize="md"
                                         firstEye={first}
                                         highlighted={isDominoHighlighted(domino)}
                                         onClick={() => onToggle(domino.index)}
                                         played={isDominoPlayed(domino)}
                                         secondEye={second}
-                                        size="md"
                                     />
                                     <div className="mt-1 text-center text-xs">
                                         {first}-{second}

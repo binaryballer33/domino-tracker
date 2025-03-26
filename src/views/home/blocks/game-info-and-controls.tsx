@@ -1,15 +1,10 @@
-import { RefreshCcw } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-
-type GameInforAndControlsProps = {
+type GameInfoAndControlsProps = {
     playedCount: number
     remainingCount: number
-    resetGame: () => void
 }
 
-export default function GameInforAndControls(props: GameInforAndControlsProps) {
-    const { playedCount, remainingCount, resetGame } = props
+export default function GameInfoAndControls(props: GameInfoAndControlsProps) {
+    const { playedCount, remainingCount } = props
 
     return (
         <div className="mt-6 flex justify-center gap-8">
@@ -20,14 +15,6 @@ export default function GameInforAndControls(props: GameInforAndControlsProps) {
             <div className="text-center">
                 <h3 className="text-lg font-medium">Boneyard</h3>
                 <p className="text-3xl font-bold">{remainingCount}</p>
-            </div>
-
-            <div className="flex flex-col items-center">
-                <h3 className="text-lg font-medium">Reset Game</h3>
-
-                <Button className="px-4 py-0" onClick={resetGame} size="lg" variant="ghost">
-                    <RefreshCcw className="!h-6 !w-6" />
-                </Button>
             </div>
         </div>
     )

@@ -16,13 +16,13 @@ export default function DominoSortedView(props: DominoSortedViewProps) {
         <div className="mb-6 grid grid-cols-4 gap-2 sm:grid-cols-5">
             {dominos.map((domino, index) => (
                 <Domino
+                    dominoDotSize="xl"
                     firstEye={domino.firstEye}
                     highlighted={isDominoHighlighted(domino)}
                     key={domino.id}
                     onClick={() => toggleDomino(index)}
                     played={isDominoPlayed(domino)}
                     secondEye={domino.secondEye}
-                    size="xl"
                 />
             ))}
         </div>

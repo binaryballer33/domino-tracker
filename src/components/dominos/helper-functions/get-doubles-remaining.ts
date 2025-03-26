@@ -7,7 +7,7 @@ export default function getDoublesRemaining(stats: EyeStat[]): number {
 
     stats.forEach((stat) => {
         const doubleId = `${stat.value}-${stat.value}`
-        if (doubleEyes.includes(doubleId) && stat.dominoes.includes(doubleId)) count += 1
+        if (doubleEyes.includes(doubleId) && stat.dominos.includes(doubleId)) count += 1
     })
 
     return count

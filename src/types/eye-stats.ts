@@ -1,7 +1,7 @@
 import type { DominoEye } from "@/types/domino"
 
 type EyeStat = {
-    dominoes: string[]
+    dominos: string[]
     played: number
     remaining: number
     total: number

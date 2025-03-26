@@ -9,16 +9,16 @@ import DominoSortedView from "@/components/dominos/domino-sorted-view"
 type DominoViewTabsProps = {
     dominos: TDomino[]
     highlightedValue: null | number
-    setDominoes: Dispatch<SetStateAction<TDomino[]>>
+    setDomino: Dispatch<SetStateAction<TDomino[]>>
 }
 
 export default function DominoViewTabs(props: DominoViewTabsProps) {
-    const { dominos, highlightedValue, setDominoes } = props
+    const { dominos, highlightedValue, setDomino } = props
 
     const toggleDomino = (index: number) => {
-        const newDominoes = [...dominos]
-        newDominoes[index].played = !newDominoes[index].played
-        setDominoes(newDominoes)
+        const newDominos = [...dominos]
+        newDominos[index].played = !newDominos[index].played
+        setDomino(newDominos)
     }
 
     const isDominoHighlighted = (domino: TDomino) => {
@@ -28,7 +28,7 @@ export default function DominoViewTabs(props: DominoViewTabsProps) {
 
     const isDominoPlayed = (domino: TDomino) => domino.played
 
-    const dominoesWithIndex = dominos.map((domino, index) => ({
+    const dominosWithIndex = dominos.map((domino, index) => ({
         ...domino,
         index,
     }))
@@ -43,7 +43,7 @@ export default function DominoViewTabs(props: DominoViewTabsProps) {
 
                 <TabsContent className="mt-4" value="by-eye">
                     <DominoRowsSortedByEyeView
-                        dominos={dominoesWithIndex}
+                        dominos={dominosWithIndex}
                         isDominoHighlighted={isDominoHighlighted}
                         isDominoPlayed={isDominoPlayed}
                         onToggle={toggleDomino}
@@ -52,7 +52,7 @@ export default function DominoViewTabs(props: DominoViewTabsProps) {
 
                 <TabsContent className="mt-4" value="all">
                     <DominoSortedView
-                        dominos={dominoesWithIndex}
+                        dominos={dominosWithIndex}
                         isDominoHighlighted={isDominoHighlighted}
                         isDominoPlayed={isDominoPlayed}
                         toggleDomino={toggleDomino}
