@@ -1,14 +1,15 @@
 import type TDomino from "@/types/domino"
+import type { Dispatch, SetStateAction } from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import Domino from "@/components/dominos/domino"
-import DominoByEye from "@/components/dominos/domino-by-eye-view"
+import DominoByEyeView from "@/components/dominos/domino-by-eye-view"
 
 type DominoViewTabsProps = {
     dominoes: TDomino[]
     highlightedValue: null | number
-    setDominoes: (dominoes: TDomino[]) => void
+    setDominoes: Dispatch<SetStateAction<TDomino[]>>
 }
 
 export default function DominoViewTabs(props: DominoViewTabsProps) {
@@ -27,6 +28,11 @@ export default function DominoViewTabs(props: DominoViewTabsProps) {
 
     const isDominoPlayed = (domino: TDomino) => domino.played
 
+    const dominoesWithIndex = dominoes.map((domino, index) => ({
+        ...domino,
+        index,
+    }))
+
     return (
         <div>
             <Tabs className="mb-6" defaultValue="by-eye">
@@ -36,11 +42,8 @@ export default function DominoViewTabs(props: DominoViewTabsProps) {
                 </TabsList>
 
                 <TabsContent className="mt-4" value="by-eye">
-                    <DominoByEye
-                        dominoes={dominoes.map((domino, index) => ({
-                            ...domino,
-                            index, // Pass index for toggling
-                        }))}
+                    <DominoByEyeView
+                        dominoes={dominoesWithIndex}
                         highlightedValue={highlightedValue}
                         onToggle={toggleDomino}
                     />

@@ -3,32 +3,19 @@
 import type { DominoWithIndex } from "@/types/domino"
 
 import Domino from "./domino"
+import getSevenRowsOfSortedDominos from "./helper-functions/get-seven-rows-sorted-dominos"
 
-type DominoByEyeProps = {
+type DominoByEyeViewProps = {
     dominoes: DominoWithIndex[]
     highlightedValue: null | number
     onToggle: (index: number) => void
 }
 
-export default function DominoByEye(props: DominoByEyeProps) {
+export default function DominoByEyeView(props: DominoByEyeViewProps) {
     const { dominoes, highlightedValue, onToggle } = props
 
-    // Create arrays for each eye value (0-6)
-    const dominoesByEye = Array(7)
-        .fill(null)
-        .map((_, eyeValue) => {
-            // Find all dominoes that contain this eye value
-            const matchingDominoes = dominoes.filter(
-                (domino) => domino.firstEye === eyeValue || domino.secondEye === eyeValue,
-            )
-
-            // Sort them by the other value (or by the same value for doubles)
-            return matchingDominoes.sort((a, b) => {
-                const aOtherValue = a.firstEye === eyeValue ? a.secondEye : a.firstEye
-                const bOtherValue = b.firstEye === eyeValue ? b.secondEye : b.firstEye
-                return aOtherValue - bOtherValue
-            })
-        })
+    // Create array of array of domino objects [ [ {domino}, {domino}, {domino} ], [ {domino}, {domino}, {domino}, ... ] ]
+    const sortedRowsOfDominos: DominoWithIndex[][] = getSevenRowsOfSortedDominos(dominoes)
 
     const isDominoHighlighted = (domino: DominoWithIndex) => {
         if (highlightedValue === null) return false
@@ -37,10 +24,10 @@ export default function DominoByEye(props: DominoByEyeProps) {
 
     return (
         <div className="space-y-6">
-            {dominoesByEye.map((eyeDominoes, eyeValue) => (
+            {sortedRowsOfDominos.map((sortedRow, eyeValue) => (
                 <div className="space-y-2" key={eyeValue}>
                     <div className="flex flex-wrap gap-2">
-                        {eyeDominoes.map((domino) => {
+                        {sortedRow.map((domino) => {
                             // Ensure the eye value is shown first
                             const first = domino.firstEye === eyeValue ? domino.firstEye : domino.secondEye
                             const second = domino.firstEye === eyeValue ? domino.secondEye : domino.firstEye
